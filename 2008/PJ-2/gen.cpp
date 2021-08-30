@@ -13,7 +13,7 @@ int main(int argc, char const *argv[])
     {
         cout<<rand()<<" ";
     }
-    cout<<endl;
+    cout<<endl;     
     cout<<rand()%n<<endl;
     return 0;
 }
