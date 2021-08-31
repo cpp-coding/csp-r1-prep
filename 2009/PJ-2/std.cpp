@@ -1,62 +1,50 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int a[1000001], n, ans = -1;
-void swap(int &a, int &b)
-{
-	int c;
-	c = a;
-	a = b;
-	b = c;
-}
-
-int FindKth(int left, int right, int n)
-{
-	int tmp, value, i, j;
-	if (left == right)
-		return left;
-	tmp = rand() % (right - left) + left;
-	swap(a[tmp], a[left]);
-	value = a[left];
-	i = left;
-	j = right;
-	while (i < j)
-	{
-		while (i < j && a[j] < value)
-			j--;
-		if (i < j)
-		{
-			a[i] = a[j];
-			i++;
-		}
-		else
-			break;
-		while (i < j && a[i] > value)
-			i++;
-		if (i < j)
-		{
-			a[j] = a[i];
-			j--;
-		}
-		else
-			break;
+int n,m,k,ans;
+int hash[50][50];
+void work(int x,int y,int tot){
+	int i,j;
+	if (tot==k){
+		ans++;
+		return;
 	}
-	a[i] = value;
-	if (i < n)
-		return FindKth(i + 1, right, n);
-	if (i > n)
-		return FindKth(left, i - 1, n);
-	return i;
+	do{
+		while (hash[x][y]){
+			y++;
+			if (y==m){
+				x++;
+				y=0;
+			}
+			if (x==n)
+				return;
+		}
+		for (i=x-1;i<=x+1;i++)
+			if (i>=0&&i<n)
+				for (j=y-1;j<=y+1;j++)
+					if (j>=0&&j<m)
+					   hash[i][j]++;
+		work(x,y,tot+1);
+		for (i=x-1;i<=x+1;i++)
+			if (i>=0&&i<n)
+				for (j=y-1;j<=y+1;j++)
+					if (j>=0&&j<m)
+					    hash[i][j]--;
+		y++;
+		if (y==m){
+			x++;
+			y=0;
+		}
+		if (x==n)
+			return;
+	}
+	while (1);
 }
-
-int main()
-{
-	int i;
-	int m = 1000000;
-	for (i = 1; i <= m; i++)
-		cin >> a[i];
-	cin >> n;
-	ans = FindKth(1, m, n);
-	cout << a[ans];
+int main(){
+	cin >> n >> m >> k;
+	ans=0;
+	memset(hash,0,sizeof(hash));
+	work(0,0,0);
+	cout << ans << endl;
 	return 0;
 }
